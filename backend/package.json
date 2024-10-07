@@ -1,14 +1,14 @@
 {
   "name": "backend",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.1.0",
+  "description": "The planner app that is Designed for the RGUKT students",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
     "dev": "nodemon index.js"
   },
-  "author": "",
+  "author": "Vaggu Deekshith",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
