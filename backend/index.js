@@ -37,3 +37,28 @@ db.on('error', (error) => {
   console.error("[-] Database connection error:", error);
 });
 
+
+app.get('/', (req, res) => {
+
+  const htmlContent = `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>API info</title>
+    </head>
+    <body>
+        <h1>Welcome to My Daily Planner Server Api</h1>
+        <p>Here are some Documentation for the EndPoints :</p>
+        <ul>
+            <li><a href="http://localhost:${SERVER_PORT}/about">About Us</a></li>
+            <li><a href="http://localhost:${SERVER_PORT}/contact">Contact</a></li>
+            <li><a href="http://localhost:${SERVER_PORT}/help">Help</a></li>
+        </ul>
+    </body>
+    </html>
+  `;
+  res.send(htmlContent);
+
+});
