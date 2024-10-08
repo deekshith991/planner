@@ -1,9 +1,9 @@
 const dotenv = require("dotenv");
-dotenv.config();
-
 const mongoose = require("mongoose");
 const cors = require("cors");
 const express = require("express");
+
+dotenv.config();
 
 console.log("[+] Starting the Server");
 
@@ -32,14 +32,12 @@ mongoose.connect(MongoUri, {
 
 // Handle connection events
 const db = mongoose.connection;
-
 db.on('error', (error) => {
   console.error("[-] Database connection error:", error);
 });
 
-
+// API Documentation Endpoint
 app.get('/', (req, res) => {
-
   const htmlContent = `
     <!DOCTYPE html>
     <html lang="en">
@@ -49,16 +47,19 @@ app.get('/', (req, res) => {
         <title>API info</title>
     </head>
     <body>
-        <h1>Welcome to My Daily Planner Server Api</h1>
+        <h1>Welcome to My Daily Planner Server API</h1>
         <p>Here are some Documentation for the EndPoints :</p>
         <ul>
-            <li><a href="http://localhost:${SERVER_PORT}/about">About Us</a></li>
-            <li><a href="http://localhost:${SERVER_PORT}/contact">Contact</a></li>
-            <li><a href="http://localhost:${SERVER_PORT}/help">Help</a></li>
+            <li><a href="http://localhost:${SERVER_PORT}/api/auth/register">Register</a></li>
+            <li><a href="http://localhost:${SERVER_PORT}/api/auth/login">Login</a></li>
         </ul>
     </body>
     </html>
   `;
   res.send(htmlContent);
-
 });
+
+// Routes
+const AuthRoute = require("./Routes/Auth.Route");
+app.use("/api/auth", AuthRoute);
+
