@@ -1,9 +1,5 @@
 const mongoose = require('mongoose');
 
-// Define the available branches and departments as arrays
-const availableBranches = ['EEE', 'CSE', 'ECE', 'MECH', 'CIVIL', 'MME', 'CHEM'];
-const availableDepartments = ['Telugu', 'English', 'Maths', 'Physics'];
-
 // User Schema
 const UserSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
@@ -16,49 +12,37 @@ const UserSchema = new mongoose.Schema({
     firstName: { type: String },
     lastName: { type: String },
     bio: { type: String },
+    department: { type: String }, // specific to professors
   },
-  userId: {
-    type: String,
-    unique: true,
-    required: true,
-  },
-  batchYear: {
-    type: Number,
-    required: function () {
-      return this.role === 'student'; // Only required for students
-    },
-  },
-  branch: {
-    type: String,
-    enum: availableBranches,
-    required: function () {
-      return this.role === 'student'; // Only required for students
-    },
-  },
-  department: {
-    type: String,
-    enum: availableDepartments, // Validating against the available departments
-    required: function () {
-      return this.role === 'professor'; // Only required for professors
-    },
-  },
-  branches: [{
-    type: String,
-    enum: availableBranches, // Validating against the available branches
-  }], // Array of branches or subjects taught by professors
+  batchYear: { type: Number, required: true },
+  branch: { type: String, required: function () { return this.role === 'student'; } }, // Branch for students
+  userId: { type: String, unique: true }, // Generated User ID
+  professorId: { type: String, unique: true },
+  branches: [{ type: String }] // Array of branches or subjects taught by professors
 });
 
-// Pre-save hook to generate userId for students
+// Middleware to generate UserID before saving the user
 UserSchema.pre('save', async function (next) {
-  if (this.role === 'student') {
-    const yearSuffix = (this.batchYear % 100).toString().padStart(2, '0'); // Get last two digits of the batch year
-    const studentCount = await this.model('User').countDocuments({ role: 'student', batchYear: this.batchYear }); // Count existing students for the batch year
-    const studentIdSuffix = (studentCount + 1).toString().padStart(4, '0'); // Generate ID suffix starting from 0001
-    this.userId = `B${yearSuffix}${studentIdSuffix}`; // Set userId in the format BYYXXXX
+  if (this.isNew) {
+    const year = String(this.batchYear).slice(-2); // Get last two digits of batch year
+    const prefix = `B${year}`;
+
+    // Find the last student ID with the same prefix
+    const lastUser = await this.constructor.findOne({ userId: { $regex: `^${prefix}` } }).sort({ userId: -1 });
+
+    // Generate new sequential ID
+    let newId;
+    if (lastUser) {
+      const lastNumber = parseInt(lastUser.userId.slice(-4), 10);
+      newId = String(lastNumber + 1).padStart(4, '0'); // Increment the last number and pad with zeros
+    } else {
+      newId = '0001'; // Start from 0001 if no existing user
+    }
+
+    this.userId = `${prefix}${newId}`; // Set the generated User ID
   }
   next();
 });
 
-// Export the User model
 module.exports = mongoose.model('User', UserSchema);
 
