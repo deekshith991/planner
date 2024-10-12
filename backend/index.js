@@ -39,4 +39,31 @@ db.on('open', () => {
     console.log(`[+] Server Online @port ${Port}`);
   });
 
+});
+
+
+
+// Documentation request
+app.get("/", (req, res) => {
+
+  const data = `
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>API info</title>
+</head>
+<body>
+<h1>Welcome to My Daily Planner Server API</h1>
+<p>Here are some Documentation for the EndPoints :</p>
+<ul>
+<li><a href="http://localhost:${Port}/api/auth/register">Register</a></li>
+<li><a href="http://localhost:${Port}/api/auth/login">Login</a></li>
+</ul>
+</body>
+</html>
+`;
+
+  res.send(data).status(200);
 })
