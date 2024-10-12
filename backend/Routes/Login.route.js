@@ -3,6 +3,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const User = require("../Models/User.model");
+const { log_in } = require("../Utils/Logger.js");
 
 const router = express.Router();
 
@@ -42,6 +43,8 @@ router.post('/login', async (req, res) => {
         res.json({ token });
       }
     );
+
+    log_in(user.UserId);
 
 
   } catch (err) {
