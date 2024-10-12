@@ -66,4 +66,12 @@ app.get("/", (req, res) => {
 `;
 
   res.send(data).status(200);
-})
+});
+
+
+// Routes importing
+const RegisterRoute = require("./Routes/Register.route.js");
+
+
+// Routes access
+app.use("/api/auth", RegisterRoute);
