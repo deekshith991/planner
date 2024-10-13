@@ -3,6 +3,8 @@
 const express = require("express");
 const router = express.Router();
 
+const { LOG, Err_log } = require("../Utils/Logger.js");
+
 const auth = require("../Middleware/TokenCheck");
 const Tasks = require("../Models/Tasks.model.js");
 
@@ -17,15 +19,18 @@ router.post("/newtask", auth, async (req, res) => {
 
   const taskdoc = new Tasks({
     UserId: UserId,
-    Task: task
+    Task: task,
+    // Uid: "yfjyhfj"
   });
 
   try {
     await taskdoc.save();
+    LOG(UserId, "Task", "Success");
     res.json(taskdoc).status(200);
 
-  } catch {
-    console.log(Error);
+  } catch (Error) {
+    Err_log(Error, "new task req");
+    res.json({ msg: "Error saving task" }).status(500);
   }
 
 });

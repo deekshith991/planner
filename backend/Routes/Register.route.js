@@ -2,6 +2,8 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+
+const { Err_log } = require("../Utils/Logger.js");
 const User = require('../Models/User.model');
 
 const router = express.Router();
@@ -49,7 +51,7 @@ router.post('/register', async (req, res) => {
     res.json({ token });
 
   } catch (err) {
-    console.error(err); // Log the error for debugging
+    Err_log(err, "Register api",)
     res.status(500).send('Server error');
   }
 });

@@ -3,7 +3,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const User = require("../Models/User.model");
-const { log_in } = require("../Utils/Logger.js");
+const { log_in, Err_log } = require("../Utils/Logger.js");
 
 const router = express.Router();
 
@@ -48,6 +48,7 @@ router.post('/login', async (req, res) => {
 
 
   } catch (err) {
+    Err_log("login route", err);
     res.status(500).send('Server error');
   }
 });
