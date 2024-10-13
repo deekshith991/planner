@@ -1,11 +1,22 @@
 // LoginForm.jsx
-import React from 'react';
+import React, { useState } from 'react';
 
 const LoginForm = () => {
+
+  const [user, setUser] = useState({
+    Username: "",
+    password: "",
+  });
+
+  const handlechange = (e) => {
+    const { name, value } = e.target;
+    setUser((prevUser) => ({ ...prevUser, [name]: value }));
+  }
+
   const handleSubmit = (event) => {
     event.preventDefault();
     // Handle login logic here
-    console.log("Login form submitted");
+    console.log("Login form submitted", user);
   };
 
   return (
@@ -18,6 +29,9 @@ const LoginForm = () => {
             type="text"
             placeholder="Username"
             className="w-full p-2 border border-gray-300 rounded"
+            name='Username'
+            value={user.Username}
+            onChange={handlechange}
             required
           />
         </div>
@@ -27,6 +41,9 @@ const LoginForm = () => {
             type="password"
             placeholder="Password"
             className="w-full p-2 border border-gray-300 rounded"
+            name='password'
+            value={user.password}
+            onChange={handlechange}
             required
           />
         </div>
