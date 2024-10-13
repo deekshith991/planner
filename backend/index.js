@@ -10,6 +10,7 @@ dotenv.config();
 const mongoose = require('mongoose');
 const express = require("express");
 const cors = require("cors");
+const auth = require("./Middleware/TokenCheck");
 
 console.log("[+] Starting Server");
 
@@ -67,6 +68,14 @@ app.get("/", (req, res) => {
 
   res.send(data).status(200);
 });
+
+
+// checkers
+
+app.get('/token-tester', auth, (req, res) => {
+  res.json({ msg: 'Welcome to your dashboard!', user: req.user });
+});
+
 
 
 // Routes importing
