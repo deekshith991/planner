@@ -81,8 +81,9 @@ app.get('/token-tester', auth, (req, res) => {
 // Routes importing
 const RegisterRoute = require("./Routes/Register.route.js");
 const LoginRoute = require("./Routes/Login.route.js");
-
+const TasksRoute = require("./Routes/Tasks.route.js");
 
 // Routes access
 app.use("/api/auth", RegisterRoute);
 app.use("/api/auth", LoginRoute);
+app.use("/api/tasks", TasksRoute);
